@@ -27,7 +27,7 @@ import algo.checksum.Checksum;
 public class MainGui extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 5517819703253784310L;
-    private static final int  COLUMN_WIDTH     = 40;
+    private static final int  COLUMN_WIDTH     = 25;
 
     public static void main(String[] args) throws Exception {
         new MainGui();
