@@ -27,7 +27,7 @@ import algo.checksum.Checksum;
 public class MainGui extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 5517819703253784310L;
-    private static final int  COLUMN_WIDTH     = 25;
+    private static final int  TEXTFIELD_WIDTH     = 280;
 
     public static void main(String[] args) throws Exception {
         new MainGui();
@@ -185,7 +185,16 @@ public class MainGui extends JFrame implements ActionListener {
         saveFile = new JPanel(new FlowLayout());
         saveFileLabel = new JLabel("存档文件：");
         saveFilePath = new JTextField();
-        saveFilePath.setColumns(COLUMN_WIDTH);
+
+        // 计算应当多少列才能把宽度保持在TEXTFIELD_WIDTH左右
+        // width1 + (width2 - width1) * (x - 1) = TEXTFIELD_WIDTH
+        // x = (TEXTFIELD_WIDTH - width1) / (width2 - width1) + 1
+        saveFilePath.setColumns(1);
+        final int width1 = saveFilePath.getPreferredSize().width;
+        saveFilePath.setColumns(2);
+        final int width2 = saveFilePath.getPreferredSize().width;
+        final int columns = (int) ((TEXTFIELD_WIDTH - width1) * 1.0 / (width2 - width1) + 1.5);
+        saveFilePath.setColumns(columns);
         saveFilePath.setEditable(false);
         saveFileButton = new JButton("浏览");
         saveFile.add(saveFileLabel);
@@ -195,7 +204,7 @@ public class MainGui extends JFrame implements ActionListener {
         crcFile = new JPanel(new FlowLayout());
         crcFileLabel = new JLabel("CRC文件：");
         crcFilePath = new JTextField();
-        crcFilePath.setColumns(COLUMN_WIDTH);
+        crcFilePath.setColumns(columns);
         crcFilePath.setEditable(false);
         crcFileButton = new JButton("浏览");
         crcFile.add(crcFileLabel);
