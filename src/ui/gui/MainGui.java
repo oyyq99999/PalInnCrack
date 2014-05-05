@@ -27,7 +27,7 @@ import algo.checksum.Checksum;
 public class MainGui extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 5517819703253784310L;
-    private static final int  TEXTFIELD_WIDTH     = 280;
+    private static final int  TEXTFIELD_WIDTH  = 280;
 
     public static void main(String[] args) throws Exception {
         new MainGui();
@@ -49,7 +49,7 @@ public class MainGui extends JFrame implements ActionListener {
     String     systemCharsetName = System.getProperty("sun.jnu.encoding");
     String     defaultPath       = "";
 
-    private MainGui() {
+    private MainGui() throws Exception {
         initData();
         initSelf();
         initComponents();
@@ -176,11 +176,15 @@ public class MainGui extends JFrame implements ActionListener {
         crcFilePath.setText(filename);
     }
 
-    private void initComponents() {
+    private void initComponents() throws Exception {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
-            e.printStackTrace();
+            try {
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            } catch (Exception e1) {
+                throw e1;
+            }
         }
         saveFile = new JPanel(new FlowLayout());
         saveFileLabel = new JLabel("存档文件：");
