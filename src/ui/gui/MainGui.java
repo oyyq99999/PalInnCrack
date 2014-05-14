@@ -113,8 +113,8 @@ public class MainGui extends JFrame implements ActionListener {
             if (result == JFileChooser.APPROVE_OPTION) {
                 String filename = chooser.getSelectedFile().getCanonicalPath();
                 crcFilePath.setText(filename);
+                defaultPath = chooser.getCurrentDirectory().getCanonicalPath();
             }
-            defaultPath = chooser.getCurrentDirectory().getCanonicalPath();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -132,8 +132,8 @@ public class MainGui extends JFrame implements ActionListener {
                 String filename = chooser.getSelectedFile().getCanonicalPath();
                 saveFilePath.setText(filename);
                 saveFilePath.postActionEvent();
+                defaultPath = chooser.getCurrentDirectory().getCanonicalPath();
             }
-            defaultPath = chooser.getCurrentDirectory().getCanonicalPath();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.security.spec.KeySpec;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,7 +16,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
 public class Checksum {
-    
+
     /**
      * 被加密的字符串
      */
@@ -23,7 +24,9 @@ public class Checksum {
 
     /**
      * 计算存档文件的校验和，以此作为加密的key
-     * @param saveFile 存档文件
+     * 
+     * @param saveFile
+     *            存档文件
      * @return 校验和的字符串形式
      */
     private static String calcChecksum(File saveFile) {
@@ -81,14 +84,26 @@ public class Checksum {
     }
 
     public static void main(String[] args) {
+        if (args.length < 1) {
+            showHelp(System.out);
+            return;
+        }
         String saveFile = args[0];
         String crcFile = null;
         if (args.length > 1) {
             crcFile = args[1];
         } else {
             crcFile = saveFile.replaceFirst("\\.[^.]+$", ".crc");
+            if (crcFile.equals(saveFile)) {
+                throw new IllegalArgumentException(
+                        "Auto generated crc file name is the same as the save file!");
+            }
         }
         encrypt(saveFile, crcFile);
+    }
+
+    private static void showHelp(PrintStream out) {
+        out.println("Usage: " + Checksum.class.getName() + " savefile" + " [crcFile]");
     }
 
     public static int encrypt(String saveFile, String crcFile) {
