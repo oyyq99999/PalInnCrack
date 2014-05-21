@@ -1,4 +1,4 @@
-package algo.checksum;
+package oyyq.palinncrack.algo;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,12 +15,14 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
+import oyyq.utils.FileUtil;
+
 public class Checksum {
 
     /**
      * 被加密的字符串
      */
-    private static final String HOLY_SHIT = "Des for PalInn";
+    private static final byte[] HOLY_SHIT = "Des for PalInn".getBytes();
 
     /**
      * 计算存档文件的校验和，以此作为加密的key
@@ -50,9 +52,7 @@ public class Checksum {
         SecretKey key = kf.generateSecret(ks);
         Cipher cipher = Cipher.getInstance("DES/ECB/NoPadding");
         cipher.init(Cipher.ENCRYPT_MODE, key);
-        for (int i = 0; i < HOLY_SHIT.length(); i++) {
-            data[i] = (byte) HOLY_SHIT.charAt(i);
-        }
+        System.arraycopy(HOLY_SHIT, 0, data, 0, Math.min(HOLY_SHIT.length, data.length));
         byte[] res = cipher.doFinal(data);
         return res;
     }
@@ -75,10 +75,9 @@ public class Checksum {
         String oldFilename = crcFile.getAbsolutePath();
         String newFilename = oldFilename
                 + (new SimpleDateFormat("'.'yyyyMMddHHmm").format(new Date()));
-        Runtime rt = Runtime.getRuntime();
         try {
-            rt.exec(String.format("cmd /c copy %s %s", oldFilename, newFilename));
-        } catch (IOException e) {
+            FileUtil.copyFile(oldFilename, newFilename);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -115,9 +114,7 @@ public class Checksum {
             String sum = calcChecksum(saveFile);
             byte[] bytes = sum.getBytes();
             byte[] key = new byte[8];
-            for (int i = 0; i < bytes.length && i < 8; i++) {
-                key[i] = bytes[i];
-            }
+            System.arraycopy(bytes, 0, key, 0, Math.min(bytes.length, key.length));
             byte[] res = encrypt(key);
             String got = "";
             for (int i = 0; i < res.length; i++) {

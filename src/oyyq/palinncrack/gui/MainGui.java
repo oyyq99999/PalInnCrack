@@ -1,4 +1,4 @@
-package ui.gui;
+package oyyq.palinncrack.gui;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -22,7 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import algo.checksum.Checksum;
+import oyyq.palinncrack.algo.Checksum;
 
 public class MainGui extends JFrame implements ActionListener {
 
