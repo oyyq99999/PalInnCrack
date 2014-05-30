@@ -15,7 +15,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
-import oyyq.utils.FileUtil;
+import oyyq.utils.io.FileUtil;
 
 public class Checksum {
 
