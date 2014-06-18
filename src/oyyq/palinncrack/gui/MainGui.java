@@ -168,10 +168,11 @@ public class MainGui extends JFrame implements ActionListener {
 
     private void generateDefaultCrcFile() {
         String filename = saveFilePath.getText();
-        if (filename.toLowerCase().endsWith(".sav")) {
-            filename = filename.replaceFirst("\\.[^.]+$", ".crc");
+        int suffixPos = filename.toLowerCase().lastIndexOf(".sav");
+        if (suffixPos + 4 == filename.length()) {
+            filename = filename.substring(0, suffixPos) + ".crc";
         } else {
-            return;
+            filename = "";
         }
         crcFilePath.setText(filename);
     }
