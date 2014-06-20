@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.prefs.Preferences;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -57,11 +58,17 @@ public class MainGui extends JFrame implements ActionListener {
     }
 
     private void initData() {
+        String path;
+        Preferences prefs = Preferences.userRoot();
+        path = prefs.node("/" + getClass().getPackage().getName()).get("default.path", null);
+        if (path != null && new File(path).isDirectory()) {
+            defaultPath = path;
+            return;
+        }
         String system = System.getProperty("os.name", "unknown");
         if (system == null || !system.toLowerCase().contains("windows")) {
             return;
         }
-        String path;
         WindowsRegistry registry = WindowsRegistry.getInstance();
         try {
             path = registry.readString(HKey.HKCU, "Software\\SOFTSTAR\\PalInn", "DIRECTORY");
