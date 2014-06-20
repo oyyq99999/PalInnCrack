@@ -3,13 +3,8 @@ package oyyq.palinncrack.gui;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -23,6 +18,10 @@ import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import oyyq.palinncrack.algo.Checksum;
+
+import com.github.sarxos.winreg.HKey;
+import com.github.sarxos.winreg.RegistryException;
+import com.github.sarxos.winreg.WindowsRegistry;
 
 public class MainGui extends JFrame implements ActionListener {
 
@@ -62,37 +61,23 @@ public class MainGui extends JFrame implements ActionListener {
         if (system == null || !system.toLowerCase().contains("windows")) {
             return;
         }
-        Runtime rt = Runtime.getRuntime();
+        String path;
+        WindowsRegistry registry = WindowsRegistry.getInstance();
         try {
-            Process process = rt
-                    .exec("cmd /c reg query HKLM\\Software\\大宇资讯集团软星科技(北京)有限公司\\仙剑客栈\\1.00.000");
-            BufferedInputStream bis = new BufferedInputStream(process.getInputStream());
-            BufferedReader br = new BufferedReader(new InputStreamReader(bis, systemCharsetName));
-            String line = null;
-            Pattern pattern = Pattern.compile("^\\s*TargetPath\\s+REG_SZ\\s+(.*)\\s*$");
-            while ((line = br.readLine()) != null) {
-                Matcher matcher = pattern.matcher(line);
-                if (matcher.find()) {
-                    defaultPath = matcher.group(1);
-                    return;
-                }
+            path = registry.readString(HKey.HKCU, "Software\\SOFTSTAR\\PalInn", "DIRECTORY");
+            if (path != null && new File(path).isDirectory()) {
+                defaultPath = path;
+                return;
             }
-
-            process = rt.exec("cmd /c reg query HKCU\\Software\\SOFTSTAR\\PalInn");
-            bis = new BufferedInputStream(process.getInputStream());
-            br = new BufferedReader(new InputStreamReader(bis, systemCharsetName));
-            line = null;
-            pattern = Pattern.compile("^\\s*DIRECTORY\\s+REG_SZ\\s+(.*)\\s*$");
-            while ((line = br.readLine()) != null) {
-                Matcher matcher = pattern.matcher(line);
-                if (matcher.find()) {
-                    defaultPath = matcher.group(1);
-                    return;
-                }
+        } catch (RegistryException e1) {}
+        try {
+            path = registry.readString(HKey.HKLM, "Software\\大宇资讯集团软星科技(北京)有限公司\\仙剑客栈\\1.00.000",
+                    "TargetPath");
+            if (path != null && new File(path).isDirectory()) {
+                defaultPath = path;
+                return;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (RegistryException e1) {}
     }
 
     private void addActions() {
