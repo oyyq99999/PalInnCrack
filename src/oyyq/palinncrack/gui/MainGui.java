@@ -3,6 +3,8 @@ package oyyq.palinncrack.gui;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.prefs.Preferences;
@@ -28,6 +30,7 @@ public class MainGui extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 5517819703253784310L;
     private static final int  TEXTFIELD_WIDTH  = 280;
+    private static final String PREFS_KEY = "defaultPath";
 
     public static void main(String[] args) throws Exception {
         new MainGui();
@@ -62,7 +65,7 @@ public class MainGui extends JFrame implements ActionListener {
 
     private void initData() {
         String path;
-        path = prefs.get("default.path", null);
+        path = prefs.get(PREFS_KEY, null);
         if (path != null && new File(path).isDirectory()) {
             defaultPath = path;
             return;
@@ -94,6 +97,14 @@ public class MainGui extends JFrame implements ActionListener {
         saveFileButton.addActionListener(this);
         crcFileButton.addActionListener(this);
         action.addActionListener(this);
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                if (e.getSource() == MainGui.this) {
+                    prefs.put(PREFS_KEY, defaultPath);
+                    MainGui.this.dispose();
+                }
+            }
+        });
     }
 
     private void chooseCrcFile() {
@@ -224,7 +235,7 @@ public class MainGui extends JFrame implements ActionListener {
 
     private void initSelf() {
         setBounds(300, 300, 480, 300);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle("仙剑客栈存档加密工具");
         setResizable(false);
     }
