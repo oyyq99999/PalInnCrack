@@ -33,21 +33,22 @@ public class MainGui extends JFrame implements ActionListener {
         new MainGui();
     }
 
-    JButton    action;
-    JPanel     crcFile;
-    JButton    crcFileButton;
+    private JButton     action;
+    private JPanel      crcFile;
+    private JButton     crcFileButton;
 
-    JLabel     crcFileLabel;
-    JTextField crcFilePath;
-    JPanel     saveFile;
-    JButton    saveFileButton;
+    private JLabel      crcFileLabel;
+    private JTextField  crcFilePath;
+    private JPanel      saveFile;
+    private JButton     saveFileButton;
 
-    JLabel     saveFileLabel;
+    private JLabel      saveFileLabel;
 
-    JTextField saveFilePath;
+    private JTextField  saveFilePath;
 
-    String     systemCharsetName = System.getProperty("sun.jnu.encoding");
-    String     defaultPath       = "";
+    private String      systemCharsetName = System.getProperty("sun.jnu.encoding");
+    private String      defaultPath       = "";
+
 
     private MainGui() throws Exception {
         initData();
