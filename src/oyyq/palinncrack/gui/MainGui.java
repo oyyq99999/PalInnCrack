@@ -49,6 +49,8 @@ public class MainGui extends JFrame implements ActionListener {
     private String      systemCharsetName = System.getProperty("sun.jnu.encoding");
     private String      defaultPath       = "";
 
+    private Preferences prefs             = Preferences.userRoot().node(
+                                                  "/" + getClass().getPackage().getName());
 
     private MainGui() throws Exception {
         initData();
@@ -60,8 +62,7 @@ public class MainGui extends JFrame implements ActionListener {
 
     private void initData() {
         String path;
-        Preferences prefs = Preferences.userRoot();
-        path = prefs.node("/" + getClass().getPackage().getName()).get("default.path", null);
+        path = prefs.get("default.path", null);
         if (path != null && new File(path).isDirectory()) {
             defaultPath = path;
             return;
