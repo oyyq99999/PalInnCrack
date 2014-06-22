@@ -28,9 +28,9 @@ import com.github.sarxos.winreg.WindowsRegistry;
 
 public class MainGui extends JFrame implements ActionListener {
 
-    private static final long serialVersionUID = 5517819703253784310L;
-    private static final int  TEXTFIELD_WIDTH  = 280;
-    private static final String PREFS_KEY = "defaultPath";
+    private static final long   serialVersionUID = 5517819703253784310L;
+    private static final int    TEXTFIELD_WIDTH  = 280;
+    private static final String PREFS_KEY        = "defaultPath";
 
     public static void main(String[] args) throws Exception {
         new MainGui();
@@ -49,11 +49,10 @@ public class MainGui extends JFrame implements ActionListener {
 
     private JTextField  saveFilePath;
 
-    private String      systemCharsetName = System.getProperty("sun.jnu.encoding");
-    private String      defaultPath       = "";
+    private String      defaultPath = "";
 
-    private Preferences prefs             = Preferences.userRoot().node(
-                                                  "/" + getClass().getPackage().getName());
+    private Preferences prefs       = Preferences.userRoot().node(
+                                            "/" + getClass().getPackage().getName());
 
     private MainGui() throws Exception {
         initData();
@@ -98,6 +97,7 @@ public class MainGui extends JFrame implements ActionListener {
         crcFileButton.addActionListener(this);
         action.addActionListener(this);
         this.addWindowListener(new WindowAdapter() {
+
             public void windowClosing(WindowEvent e) {
                 if (e.getSource() == MainGui.this) {
                     prefs.put(PREFS_KEY, defaultPath);
