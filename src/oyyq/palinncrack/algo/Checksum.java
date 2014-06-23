@@ -6,15 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.security.spec.KeySpec;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.DESKeySpec;
-
+import oyyq.utils.cipher.CipherUtils;
 import oyyq.utils.io.FileUtil;
 
 public class Checksum {
@@ -43,18 +38,6 @@ public class Checksum {
         } catch (IOException e) {
             return null;
         }
-    }
-
-    private static byte[] encrypt(byte[] src) throws Exception {
-        byte[] data = new byte[16];
-        KeySpec ks = new DESKeySpec(src);
-        SecretKeyFactory kf = SecretKeyFactory.getInstance("DES");
-        SecretKey key = kf.generateSecret(ks);
-        Cipher cipher = Cipher.getInstance("DES/ECB/NoPadding");
-        cipher.init(Cipher.ENCRYPT_MODE, key);
-        System.arraycopy(HOLY_SHIT, 0, data, 0, Math.min(HOLY_SHIT.length, data.length));
-        byte[] res = cipher.doFinal(data);
-        return res;
     }
 
     private static void save(String got, File crcFile) throws Exception {
@@ -115,10 +98,12 @@ public class Checksum {
             byte[] bytes = sum.getBytes();
             byte[] key = new byte[8];
             System.arraycopy(bytes, 0, key, 0, Math.min(bytes.length, key.length));
-            byte[] res = encrypt(key);
+            byte[] src = new byte[16];
+            System.arraycopy(HOLY_SHIT, 0, src, 0, Math.min(HOLY_SHIT.length, src.length));
+            byte[] res = CipherUtils.desEcbNoPaddingEncrypt(src, key);
             String got = "";
             for (int i = 0; i < res.length; i++) {
-                got += String.format("%02X", res[i] & 0xFF);
+                got += String.format("%02X", res[i]);
             }
             save(got, crcFile);
         } catch (FileNotFoundException e) {
