@@ -28,11 +28,13 @@ public class Checksum {
      */
     private static String calcChecksum(File saveFile) {
         try (FileInputStream fis = new FileInputStream(saveFile)) {
-            long length = saveFile.length();
+            byte[] buffer = new byte[4096];
             long checksum = 0;
-            while (length-- > 0) {
-                int one = fis.read();
-                checksum += one;
+            int readSize = -1;
+            while ((readSize = fis.read(buffer)) != -1) {
+                for (int i = 0; i < readSize; i++) {
+                    checksum += buffer[i] & 0xff; // in case of negatives make trouble
+                }
             }
             return checksum + "";
         } catch (IOException e) {
