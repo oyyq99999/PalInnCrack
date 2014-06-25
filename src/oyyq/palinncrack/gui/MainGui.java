@@ -21,6 +21,7 @@ import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import oyyq.palinncrack.algo.Checksum;
+import oyyq.utils.io.FileUtil;
 
 import com.github.sarxos.winreg.HKey;
 import com.github.sarxos.winreg.RegistryException;
@@ -117,6 +118,9 @@ public class MainGui extends JFrame implements ActionListener {
         try {
             if (result == JFileChooser.APPROVE_OPTION) {
                 String filename = chooser.getSelectedFile().getCanonicalPath();
+                if (!FileUtil.checkExtension(filename, "crc")) {
+                    filename = filename.replaceAll("\\.+$", "") + ".crc";
+                }
                 crcFilePath.setText(filename);
                 defaultPath = chooser.getCurrentDirectory().getCanonicalPath();
             }
@@ -135,9 +139,11 @@ public class MainGui extends JFrame implements ActionListener {
         try {
             if (result == JFileChooser.APPROVE_OPTION) {
                 String filename = chooser.getSelectedFile().getCanonicalPath();
-                saveFilePath.setText(filename);
-                saveFilePath.postActionEvent();
-                defaultPath = chooser.getCurrentDirectory().getCanonicalPath();
+                if (FileUtil.checkExtension(filename, "sav")) {
+                    saveFilePath.setText(filename);
+                    saveFilePath.postActionEvent();
+                    defaultPath = chooser.getCurrentDirectory().getCanonicalPath();
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
