@@ -1,6 +1,0 @@
-[submodule "Utils"]
-	path = Utils
-	url = https://github.com/oyyq99999/Utils.git
-[submodule "win-registry"]
-	path = win-registry
-	url = https://github.com/oyyq99999/win-registry.git
