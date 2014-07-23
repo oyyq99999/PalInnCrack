@@ -158,11 +158,6 @@ public class MainGui extends JFrame implements ActionListener {
         }
         File crcFile = new File(crcFilePath.getText());
         if (crcFile.exists()) {
-            if (crcFile.getAbsolutePath().equals(saveFile.getAbsolutePath())) {
-                JOptionPane
-                        .showMessageDialog(this, "存档文件和加密文件相同！", "错误", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
             int result = JOptionPane.showConfirmDialog(this, "加密文件已存在，是否覆盖？", "文件已存在",
                     JOptionPane.OK_CANCEL_OPTION);
             if (result == JOptionPane.CANCEL_OPTION) {
