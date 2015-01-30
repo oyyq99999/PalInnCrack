@@ -1,0 +1,31 @@
+allprojects {
+	apply plugin: 'java'
+	tasks.withType(JavaCompile) {
+		options.encoding = 'UTF-8'
+	}
+	sourceSets {
+		main {
+			java.srcDirs = ["src"]
+		}
+	}
+}
+
+project('win-registry') {
+	sourceSets.main.java.srcDirs = ['src/main/java']
+}
+
+apply plugin: 'application'
+
+mainClassName = 'oyyq.palinncrack.gui.MainGui'
+
+task fatJar(type: Jar) {
+	manifest {
+		attributes 'Main-Class': 'oyyq.palinncrack.gui.MainGui'
+	}
+	baseName = project.name + '-all'
+	from {configurations.compile.collect {it.isDirectory() ? it : zipTree(it)}} with jar
+}
+
+dependencies {
+	compile project('Utils'), project('win-registry')
+}
